@@ -39,4 +39,22 @@ export class PostService {
       return { error: { message: (err as Error).message }, status: 400 };
     }
   }
+
+  async updatePost(id: number, data: { title: string; description: string; author: string }) {
+  try {
+    const title = Title.create(data.title);
+    const description = Description.create(data.description);
+    const author = Author.create(data.author);
+
+    const updated = await this.repository.update(id, {
+      title: title.value,
+      description: description.value,
+      author: author.value,
+    });
+
+    return { success: true, updated };
+  } catch (err) {
+    return { error: { message: (err as Error).message }, status: 400 };
+  }
+  }
 }

@@ -15,4 +15,14 @@ export class PostgresPostRepository implements IPostRepository {
     const posts = await sql`SELECT id, title, description, author FROM "dbBuenasPracticasPoo" ORDER BY id DESC`;
     return posts;
   }
+
+  async update(id: number, post: { title: string; description: string; author: string }) {
+  const result = await sql`
+    UPDATE "dbBuenasPracticasPoo"
+    SET title = ${post.title}, description = ${post.description}, author = ${post.author}
+    WHERE id = ${id}
+    RETURNING id, title, description, author
+  `;
+  return result[0];
+  }
 }
