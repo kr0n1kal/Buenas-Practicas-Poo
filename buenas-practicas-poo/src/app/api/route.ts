@@ -113,8 +113,14 @@ export async function POST(req: NextRequest) {
       if (result) return result;
     }
 
-    // No database insertion yet
-    return NextResponse.json({ success: true, message: 'All validations passed', validatedData: data });
+    // Insert into database
+    const inserted = await sql`
+      INSERT INTO posts (title, description, author)
+      VALUES (${data.title}, ${data.description}, ${data.author})
+      RETURNING id, title, description, author
+    `;
+
+    return NextResponse.json({ success: true, inserted: inserted[0] });
   } catch (err) {
     return NextResponse.json({ error: 'Invalid request', details: String(err) }, { status: 400 });
   }
