@@ -1,19 +1,22 @@
-import { PostValidator } from '../validators/PostValidator';
 import { PostRepository } from '../repositories/PostRepository';
+import { Title } from '../value-objects/Title';
+import { Description } from '../value-objects/Description';
+import { Author } from '../value-objects/Author';
 
 export class PostService {
-  private validator = PostValidator;
-  private repository: PostRepository;
+  constructor(private repository: PostRepository) {}
 
-  constructor(repository: PostRepository) {
-    this.repository = repository;
-  }
+  async createPost(data: { title: string; description: string; author: string }) {
+    try {
+      // Value Objects handle the validation
+      const title = Title.create(data.title);
+      const description = Description.create(data.description);
+      const author = Author.create(data.author);
 
-  async createPost(data: any) {
-    const validationError = this.validator.runAll(data);
-    if (validationError) return { error: validationError, status: 400 };
-
-    const inserted = await this.repository.insert(data.title, data.description, data.author);
-    return { success: true, inserted };
+      const inserted = await this.repository.insert(title.value, description.value, author.value);
+      return { success: true, inserted };
+    } catch (err) {
+      return { error: { message: (err as Error).message }, status: 400 };
+    }
   }
 }
