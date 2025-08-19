@@ -1,8 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { PostRepository } from '../repositories/PostRepository';
 import { PostService } from '../services/PostService';
+import { PostgresPostRepository } from '../repositories/PostgresPostRepository';
 
-const repository = new PostRepository();
+const repository = new PostgresPostRepository();
 const service = new PostService(repository);
 
 export async function POST(req: NextRequest) {
