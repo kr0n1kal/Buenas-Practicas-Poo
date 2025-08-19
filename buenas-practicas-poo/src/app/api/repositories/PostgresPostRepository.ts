@@ -25,4 +25,11 @@ export class PostgresPostRepository implements IPostRepository {
   `;
   return result[0];
   }
+
+  async delete(id: number): Promise<void> {
+  await sql`
+    DELETE FROM "dbBuenasPracticasPoo"
+    WHERE id = ${id}
+  `;
+  }
 }

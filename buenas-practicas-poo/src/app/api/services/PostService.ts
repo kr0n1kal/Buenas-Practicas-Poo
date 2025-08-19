@@ -57,4 +57,15 @@ export class PostService {
     return { error: { message: (err as Error).message }, status: 400 };
   }
   }
+
+  async deletePost(id: number) {
+  try {
+    if (!id) throw new Error('Post ID is required');
+
+    await this.repository.delete(id);
+    return { success: true, message: `Post with ID ${id} deleted` };
+  } catch (err) {
+    return { error: { message: (err as Error).message }, status: 400 };
+  }
+}
 }

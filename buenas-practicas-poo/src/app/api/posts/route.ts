@@ -42,3 +42,19 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid request', details: String(err) }, { status: 400 });
   }
 }
+
+// DELETE /api/posts
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+
+    if (!id) return NextResponse.json({ error: 'Missing post ID' }, { status: 400 });
+
+    const result = await service.deletePost(id);
+
+    if (result.error) return NextResponse.json(result.error, { status: 400 });
+    return NextResponse.json(result);
+  } catch (err) {
+    return NextResponse.json({ error: 'Invalid request', details: String(err) }, { status: 400 });
+  }
+}
