@@ -14,7 +14,6 @@ export class PostService {
 
   async createPost(data: PostData) {
     try {
-      // Value Objects: encapsulan toda validación
       const title = Title.create(data.title);
       const description = Description.create(data.description);
       const author = Author.create(data.author);
@@ -26,6 +25,16 @@ export class PostService {
       });
 
       return { success: true, inserted };
+    } catch (err) {
+      return { error: { message: (err as Error).message }, status: 400 };
+    }
+  }
+
+  // Nuevo método para obtener todos los posts
+  async getAllPosts() {
+    try {
+      const posts = await this.repository.getAll();
+      return { success: true, posts };
     } catch (err) {
       return { error: { message: (err as Error).message }, status: 400 };
     }

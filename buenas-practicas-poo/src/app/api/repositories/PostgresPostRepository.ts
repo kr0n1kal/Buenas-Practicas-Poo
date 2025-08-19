@@ -10,4 +10,9 @@ export class PostgresPostRepository implements IPostRepository {
     `;
     return result[0];
   }
+
+  async getAll(): Promise<any[]> {
+    const posts = await sql`SELECT id, title, description, author FROM "dbBuenasPracticasPoo" ORDER BY id DESC`;
+    return posts;
+  }
 }
